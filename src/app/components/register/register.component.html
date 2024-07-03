@@ -1,12 +1,25 @@
-<div>
-  <h2>Registrar</h2>
-  <form (ngSubmit)="register()">
-    <label for="username">Usuário:</label>
-    <input type="text" id="username" [(ngModel)]="username" name="username" required>
-
-    <label for="password">Senha:</label>
-    <input type="password" id="password" [(ngModel)]="password" name="password" required>
-
-    <button type="submit">Register</button>
-  </form>
+<div class="flex align-content-center flex-wrap justify-content-center " style="min-height: 500px">
+  <p-toast />
+  <p-card class="align-items-center" header=" Bem Vindo!" subheader="Informe usuário e senha"
+    [style]="{ width: '400px' }">
+    <form (ngSubmit)="register()" ngNativeValidate>
+      <p-inputGroup class="w-full">
+        <p-inputGroupAddon class="col-4">Usuário</p-inputGroupAddon>
+        <input pInputText id="username" [disabled]="loading" [(ngModel)]="username" required
+          [ngModelOptions]="{standalone: true}" />
+      </p-inputGroup>
+      <p-inputGroup class="w-full mt-2">
+        <p-inputGroupAddon class="col-4">Senha</p-inputGroupAddon>
+        <input pInputText type="password" [disabled]="loading" id="password" [(ngModel)]="password" required
+          [ngModelOptions]="{standalone: true}">
+      </p-inputGroup>
+      <div class="flex gap-2 mt-3 gutter">
+        <p-button type="button" label="Voltar" severity="secondary" [disabled]="loading" class="w-full"
+          styleClass="w-full" (click)="goToPage('/login')" />
+        <p-button type="submit" label="Registrar" [disabled]="loading" class="w-full" styleClass="w-full" />
+      </div>
+    </form>
+    <p-progressBar mode="{{loading ? 'indeterminate' : ''}}"
+      [style]="{ height: '6px', marginTop:'15px', marginBottom:'-20px'}" />
+  </p-card>
 </div>
