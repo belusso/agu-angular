@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormsModule } from "@angular/forms";
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { AuthService } from "../../services/auth.service";
 import { Router } from "@angular/router";
 import { InputTextModule } from 'primeng/inputtext';
@@ -16,6 +16,7 @@ import { MessageService } from 'primeng/api';
   standalone: true,
   imports: [
     FormsModule,
+    ReactiveFormsModule,
     InputTextModule,
     ButtonModule,
     FloatLabelModule,
@@ -31,34 +32,49 @@ import { MessageService } from 'primeng/api';
 })
 export class LoginComponent {
 
-  username: string = '';
-  password: string = '';
   loading: boolean = false
+  form: FormGroup
 
   constructor(
     private authService: AuthService,
     private router: Router,
-    private messageService: MessageService
-  ) { }
+    private messageService: MessageService,
+    private fb: FormBuilder
+  ) {
+    this.form = this.fb.group({
+      username: ['', Validators.required],
+      password: ['', Validators.required],
+    });
+  }
+
 
   login() {
-    this.loading = true
-    this.authService.login(this.username, this.password).subscribe({
-      next: (response) => {
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('username', this.username);
-        this.router.navigate(['/tasks']);
-      }, error: (res) => {
-        this.loading = false
-        this.username = ''
-        this.password = ''
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: `Erro: ${res.status} - ${res.error.message || res.message}`
-        });
-      }
-    })
+    if (this.form.valid) {
+      this.loading = true
+      this.authService.login(this.form.value.username, this.form.value.password).subscribe({
+        next: (response) => {
+          localStorage.setItem('token', response.token);
+          localStorage.setItem('username', this.form.value.username);
+          this.router.navigate(['/tasks']);
+        }, error: (res) => {
+          this.loading = false
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: `Erro: ${res.status} - ${res.error.message || res.message}`
+          });
+        }
+      })
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: `Os campos usuário e senha são obrigatórios.`
+      });
+    }
+
+
+
   }
 
   goToPage(pagename: string) {

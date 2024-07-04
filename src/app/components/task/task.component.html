@@ -2,18 +2,16 @@
   <p-toast />
   <p-card class="align-items-center" header="{{ idTask > 0 ? 'Editar tarefa' : 'Nota tarefa' }}"
     [style]="{ width: '600px' }">
-    <form (ngSubmit)="saveTask()" ngNativeValidate>
+    <form (ngSubmit)="saveTask()" [formGroup]="form">
       <div class="mt-2">
         <p-floatLabel class="p-fluid">
-          <input pInputText id="title" [disabled]="loading" [(ngModel)]="title" required
-            [ngModelOptions]="{standalone: true}" />
+          <input pInputText id="title" formControlName="title" />
           <label for="title">Titulo</label>
         </p-floatLabel>
       </div>
       <div class="mt-5">
         <p-floatLabel class="p-fluid">
-          <textarea rows="5" cols="30" pInputTextarea [disabled]="loading" id="description" [(ngModel)]="description"
-            [ngModelOptions]="{standalone: true}">
+          <textarea rows="5" cols="30" pInputTextarea formControlName="description">
           </textarea>
           <label for="title">Descrição</label>
         </p-floatLabel>

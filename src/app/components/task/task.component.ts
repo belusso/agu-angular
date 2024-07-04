@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TaskService } from "../../services/task.service";
-import { FormsModule } from "@angular/forms";
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { ProgressBarModule } from 'primeng/progressbar';
@@ -22,7 +22,8 @@ import { ToastModule } from 'primeng/toast';
     InputTextareaModule,
     InputTextModule,
     FloatLabelModule,
-    ToastModule
+    ToastModule,
+    ReactiveFormsModule
   ],
   templateUrl: './task.component.html',
   styleUrl: './task.component.scss',
@@ -30,18 +31,21 @@ import { ToastModule } from 'primeng/toast';
 })
 export class TaskComponent implements OnInit {
 
-  title: string = '';
-  description: string = '';
   loading: boolean = false
   idTask: number = 0
+  form: FormGroup
 
   constructor(
     private taskService: TaskService,
     private router: Router,
     private route: ActivatedRoute,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private fb: FormBuilder
   ) {
-
+    this.form = this.fb.group({
+      title: ['', Validators.required],
+      description: [''],
+    });
   }
 
   ngOnInit(): void {
@@ -57,8 +61,10 @@ export class TaskComponent implements OnInit {
     this.loading = true
     this.taskService.getTaskById(this.idTask).subscribe({
       next: (task) => {
-        this.title = task.title
-        this.description = task.description
+        this.form.patchValue({
+          title: task.title,
+          description: task.description
+        });
       }, error: (res) => {
         this.loading = false
         this.messageService.add({
@@ -76,19 +82,27 @@ export class TaskComponent implements OnInit {
   }
 
   saveTask() {
-    this.loading = true
-    this.taskService.saveTask(this.idTask, this.title, this.description).subscribe({
-      next: () => {
-        this.router.navigate(['/tasks']);
-      }, error: (res) => {
-        this.loading = false
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: `Erro: ${res.status} - ${res.error.message || res.message}`,
-        })
-      }
-    })
+    if (this.form.valid) {
+      this.loading = true
+      this.taskService.saveTask(this.idTask, this.form.value.title, this.form.value.description).subscribe({
+        next: () => {
+          this.router.navigate(['/tasks']);
+        }, error: (res) => {
+          this.loading = false
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: `Erro: ${res.status} - ${res.error.message || res.message}`,
+          })
+        }
+      })
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: `O campo título é obrigatório.`
+      });
+    }
   }
 
   goToPage(pagename: string) {

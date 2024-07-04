@@ -2,16 +2,14 @@
   <p-toast />
   <p-card class="align-items-center" header=" Bem Vindo!" subheader="Faça login pra iniciar"
     [style]="{ width: '400px' }">
-    <form (ngSubmit)="login()" ngNativeValidate>
+    <form (ngSubmit)="login()" [formGroup]="form">
       <p-inputGroup class="w-full">
         <p-inputGroupAddon class="col-4">Usuário</p-inputGroupAddon>
-        <input pInputText id="username" [disabled]="loading" [(ngModel)]="username" required
-          [ngModelOptions]="{standalone: true}" />
+        <input pInputText formControlName="username" />
       </p-inputGroup>
       <p-inputGroup class="w-full mt-2">
         <p-inputGroupAddon class="col-4">Senha</p-inputGroupAddon>
-        <input pInputText type="password" [disabled]="loading" id="password" [(ngModel)]="password" required
-          [ngModelOptions]="{standalone: true}">
+        <input pInputText type="password" formControlName="password" required>
       </p-inputGroup>
       <div class="flex gap-2 mt-3 gutter">
         <p-button type="button" [disabled]="loading" label="Registrar" class="w-full" styleClass="w-full"
