@@ -1,14 +1,3 @@
-# Desenvolvedor 
-## Descrição do Projeto
-Você será responsável por desenvolver uma aplicação simples de gerenciamento de tarefas (To-Do List) que permita ao usuário adicionar, editar, remover e listar tarefas. A aplicação deverá ser desenvolvida utilizando a stack especificada. A interface deve ser intuitiva e responsiva. A comunicação entre o frontend e o backend deve ser realizada via REST API.
-Este teste pode ser melhorado, porém é necessário que seja respeitado as tecnologias listas.
-
-## Requisitos Funcionais
-### Autenticação:
-
-O usuário deve ser capaz de se autenticar utilizando JWT.
-A autenticação deve ser implementada no backend com PHP e Symfony.
-
 ### Gerenciamento de Tarefas:
 
 - Adicionar uma nova tarefa.
