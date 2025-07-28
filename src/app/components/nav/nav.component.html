@@ -1,5 +1,17 @@
-<nav>
-  <a routerLink="/tasks">Tasks</a>
-  <a routerLink="/task">Add Task</a>
-  <a (click)="logout()">Logout</a>
-</nav>
+<div class="card">
+  <p-toolbar>
+    <div class="p-toolbar-group-start">
+      <p-button icon="pi pi-plus" class="mr-2" (onClick)="addTask()" />
+    </div>
+    <div class="p-toolbar-group-center">
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input pInputText [(ngModel)]="filter" (keyup)="filterChange.emit(filter)" [ngModelOptions]="{standalone: true}"
+          placeholder="Search" />
+      </span>
+    </div>
+    <div class="p-toolbar-group-end">
+      <user-info></user-info>
+    </div>
+  </p-toolbar>
+</div>

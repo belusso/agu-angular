@@ -1,8 +1,27 @@
-<div>
-  <h2>Tasks</h2>
-  <ul>
-    <li *ngFor="let task of tasks">
-      {{ task.title }} - {{ task.description }}
-    </li>
-  </ul>
+<app-nav (filterChange)="filter = $event"></app-nav>
+<p-progressBar mode="{{loading ? 'indeterminate' : ''}}"
+  [style]="{ height: '6px', marginTop:'-6px', marginBottom:'-20px'}" />
+<div class="flex align-content-center flex-wrap justify-content-center ">
+  <p-toast />
+  <p-confirmDialog></p-confirmDialog>
+  <p-table class="mt-6" [value]="filteredTasks()" [tableStyle]="{ 'min-width': '50rem' }"
+    [globalFilterFields]="['title', 'description']">
+    <ng-template pTemplate="body" let-task>
+      <tr>
+        <td class="col-4"><b>{{ task.title }}</b></td>
+        <td class="col-6">{{ task.description }}</td>
+        <td>
+        </td>
+        <td class="col-2">
+          <p-button icon="pi pi-pencil" severity="success" (onClick)="edit(task.id)" class="mr-2" />
+          <p-button icon="pi pi-trash" severity="danger" (onClick)="delete(task.id)" />
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="3" class="text-center">Nenhuma tarefa</td>
+      </tr>
+    </ng-template>
+  </p-table>
 </div>
